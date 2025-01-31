@@ -9,7 +9,7 @@ router.post("/create-product",shopController.createProduct)
 // delete product.
 router.delete("/delete-product/:id",shopController.deleteProduct)
 
-//find product
+//find products
 router.get("/find-product",shopController.findProduct)
 
 
