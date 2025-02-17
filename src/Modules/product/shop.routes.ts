@@ -13,8 +13,13 @@ router.delete("/delete-product/:id",shopController.deleteProduct)
 router.get("/find-product",shopController.findProduct)
 
 
+//create due customer
+router.post("/due/create-customer",shopController.createDueCustomer)
+// get due customer
+router.get("/customer/due",shopController.getdueCustomer)
 
+// create  a sell.
+router.post("/sell/create",shopController.createASell)
 
-
-
+ 
 export const productRouter=router
