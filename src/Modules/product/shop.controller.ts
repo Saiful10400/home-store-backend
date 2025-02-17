@@ -74,7 +74,7 @@ const createASell = catchAsync(async (req: Request, res: Response) => {
     data,
     success: true,
     statusCode: httpStatus.OK,
-    message: "A sell created.",
+    message: "A complete sell created.",
   });
 });
 
