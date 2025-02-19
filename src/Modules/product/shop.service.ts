@@ -180,7 +180,7 @@ const getAParticularDaySells = async (payload: string) => {
   const nextDate = new Date(`${year}-${month}-${Number(day)+1}T00:00:00Z`);
   
 
-  const result = await sellModel.find({ createdAt: { $gte: queryDate,$lt:nextDate } }).populate({path:"products.name",select:"banglaName -_id"})
+  const result = await sellModel.find({ createdAt: { $gte: queryDate,$lt:nextDate } }).populate({path:"products.name",select:"banglaName -_id"}).sort({"_id":-1})
  
 
   
