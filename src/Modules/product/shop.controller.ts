@@ -17,6 +17,17 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
     message: "Product created.",
   });
 });
+// update product
+const updateProduct = catchAsync(async (req: Request, res: Response) => {
+   
+  const data = await shopService.updateProduct(req.params.id as string,req.body);
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Product updated successfully.",
+  });
+});
 
 // deleteProduct
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
@@ -78,5 +89,28 @@ const createASell = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const shopController = { createProduct, deleteProduct, findProduct,createDueCustomer,getdueCustomer,createASell };
+// get all sell.
+ 
+const getAllSells = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.getAllSells();
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "All sells retrieved",
+  });
+});
+// get all sell.
+ 
+const getASpecificDateSells = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.getAParticularDaySells(req.params.id);
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "a day's all sells retrieved",
+  });
+});
+
+const shopController = { getASpecificDateSells,getAllSells,createProduct, deleteProduct, findProduct,createDueCustomer,getdueCustomer,createASell,updateProduct };
 export default shopController;

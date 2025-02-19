@@ -6,6 +6,9 @@ const router=Router()
 // create a product.
 router.post("/create-product",shopController.createProduct)
 
+// update a product.
+router.put("/update-product/:id",shopController.updateProduct)
+
 // delete product.
 router.delete("/delete-product/:id",shopController.deleteProduct)
 
@@ -20,6 +23,12 @@ router.get("/customer/due",shopController.getdueCustomer)
 
 // create  a sell.
 router.post("/sell/create",shopController.createASell)
+
+// get  all sells.
+router.get("/sell",shopController.getAllSells)
+
+// get  a particular day sells.
+router.get("/sell/:id",shopController.getASpecificDateSells)
 
  
 export const productRouter=router

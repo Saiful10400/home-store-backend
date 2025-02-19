@@ -53,7 +53,8 @@ const sellSchema = new Schema<tsell>(
     products: [
       {
         name: {
-          type: String,
+          type: mongoose.Schema.Types.ObjectId,
+          ref:"product",
           require: true,
         },
         quantity: {
@@ -92,6 +93,7 @@ const sellSchema = new Schema<tsell>(
       required: true,
     },
     profit: { type: Number, required: true },
+    expenses: { type: Number, required: true },
     due: { type: mongoose.Types.Decimal128, required: false },
   },
   { timestamps: true }

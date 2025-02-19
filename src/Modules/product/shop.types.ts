@@ -8,7 +8,7 @@ export type tProducts = {
   image: string;
 };
 export type tDuecustomer = {
-  name: string;
+  name: mongoose.Schema.Types.ObjectId;
   address: string;
   phone: string;
 };
@@ -34,7 +34,9 @@ export type tsell = {
   dueCustomer?: mongoose.Types.ObjectId;
   paymentType: "nogod"|"bakiNogod"|"baki";
   profit: number;
+  expenses: number;
   due?:mongoose.Types.Decimal128;
+  createdAt?:Date
 };
 
 export type tDueSell = {
