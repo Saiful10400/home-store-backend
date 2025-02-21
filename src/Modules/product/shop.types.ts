@@ -40,15 +40,6 @@ export type tsell = {
 };
 
 export type tDueSell = {
-  products: {
-    name: string;
-    quantity: number;
-    price: number;
-    totalPrice: number;
-  }[];
-  Discount: number | 0;
-  dueCustomer?: string;
-  paymentType: string;
-  paid?: number;
-  due: number;
+ user: mongoose.Types.ObjectId
+ sell: mongoose.Types.ObjectId
 };

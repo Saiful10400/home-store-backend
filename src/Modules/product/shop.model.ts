@@ -1,6 +1,7 @@
 import mongoose, { model, Schema } from "mongoose";
 import { tDuecustomer, tDueSell, tProducts, tsell } from "./shop.types";
 
+// Due product...........
 const productSchema = new Schema<tProducts>({
   englishName: {
     type: String,
@@ -26,6 +27,7 @@ const productSchema = new Schema<tProducts>({
 
 export const productModel = model<tProducts>("product", productSchema);
 
+// Due customer..........
 const dueCustomerSchema = new Schema<tDuecustomer>({
   name: {
     type: String,
@@ -48,13 +50,14 @@ export const dueCustomerModel = model<tDuecustomer>(
   dueCustomerSchema
 );
 
+// Sells..................
 const sellSchema = new Schema<tsell>(
   {
     products: [
       {
         name: {
           type: mongoose.Schema.Types.ObjectId,
-          ref:"product",
+          ref: "product",
           require: true,
         },
         quantity: {
@@ -101,29 +104,11 @@ const sellSchema = new Schema<tsell>(
 
 export const sellModel = model<tsell>("sell", sellSchema);
 
+// Due sells.............................
 const dueSellSchema = new Schema<tDueSell>(
   {
-    products: [
-      {
-        name: {
-          type: String,
-          require: true,
-        },
-        quantity: {
-          type: Number,
-          require: true,
-        },
-        price: { type: Number, require: true },
-        totalPrice: { type: Number, require: true },
-      },
-    ],
-    Discount: {
-      type: Number,
-    },
-    dueCustomer: { type: String, required: false },
-    paymentType: { type: String, required: true },
-    paid: { type: Number, required: false },
-    due: { type: Number, required: true },
+    user: { type: mongoose.Schema.ObjectId, ref: "user", required: true },
+    sell: { type: mongoose.Schema.ObjectId, ref: "sell", required: true },
   },
   { timestamps: true }
 );

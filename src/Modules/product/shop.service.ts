@@ -1,7 +1,7 @@
 // create product.
 
 import mongoose from "mongoose";
-import { dueCustomerModel, productModel, sellModel } from "./shop.model";
+import { dueCustomerModel, dueSellModel, productModel, sellModel } from "./shop.model";
 import { tDuecustomer, tProduct, tProducts, tsell } from "./shop.types";
 import appError from "../../Errors/appError";
 
@@ -130,8 +130,13 @@ const createASell = async (payload: {
         const sellCollectionData = await addToSellCollection();
         result = { sellCollectionData };
       } else if (payload.paymentType === "baki") {
+        
         const sellCollectionData = await addToSellCollection();
-        result = { sellCollectionData };
+
+        // add to due customer profile.
+        const addToDucustomerProfile=await dueSellModel.create({sell:sellCollectionData._id,user:payload.dueCustomerId})
+
+        result = { sellCollectionData,addToDucustomerProfile };
       }
       return result;
     });
@@ -177,31 +182,32 @@ const getAParticularDaySells = async (payload: string) => {
   // Convert the string date to a Date object
   const [day, month, year] = payload.split("-");
   const queryDate = new Date(`${year}-${month}-${day}T00:00:00Z`);
-  const nextDate = new Date(`${year}-${month}-${Number(day)+1}T00:00:00Z`);
-  
+  const nextDate = new Date(`${year}-${month}-${Number(day) + 1}T00:00:00Z`);
 
-  const result = await sellModel.find({ createdAt: { $gte: queryDate,$lt:nextDate } }).populate({path:"products.name",select:"banglaName -_id"}).sort({"_id":-1})
- 
+  const result = await sellModel
+    .find({ createdAt: { $gte: queryDate, $lt: nextDate } })
+    .populate({ path: "products.name", select: "banglaName -_id" })
+    .sort({ _id: -1 });
 
-  
-const formatedData=result.map(item=>{
-  return{
-    products:item.products.map(product=>({name:product.name,quantity:Number(product.quantity),singleBuyingPrice: Number(product.singleBuyingPrice),
-      singleSellingPrice:Number(product.singleSellingPrice) ,
-      totalPrice: Number(product.totalPrice) ,
-      totalProfit: Number(product.totalProfit),})),
-      discount:item.Discount,
-      paymentType:item.paymentType,
-      profit:item.profit,
-      expenses:item.expenses,
-     created:item.createdAt
-      
-  }
-})
- 
- 
- 
-  return formatedData
+  const formatedData = result.map((item) => {
+    return {
+      products: item.products.map((product) => ({
+        name: product.name,
+        quantity: Number(product.quantity),
+        singleBuyingPrice: Number(product.singleBuyingPrice),
+        singleSellingPrice: Number(product.singleSellingPrice),
+        totalPrice: Number(product.totalPrice),
+        totalProfit: Number(product.totalProfit),
+      })),
+      discount: item.Discount,
+      paymentType: item.paymentType,
+      profit: item.profit,
+      expenses: item.expenses,
+      created: item.createdAt,
+    };
+  });
+
+  return formatedData;
 };
 
 const shopService = {
