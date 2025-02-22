@@ -30,5 +30,9 @@ router.get("/sell",shopController.getAllSells)
 // get  a particular day sells.
 router.get("/sell/:id",shopController.getASpecificDateSells)
 
+
+// get a due user all sells.
+router.get("/sell/due-user/:id",shopController.aDueUserAllSells)  
+
  
 export const productRouter=router

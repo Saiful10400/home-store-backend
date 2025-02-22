@@ -210,7 +210,15 @@ const getAParticularDaySells = async (payload: string) => {
   return formatedData;
 };
 
+// get a due user all sells.
+const ADueUserAllSElls=async(id:string)=>{
+  
+  const result=await dueSellModel.find({user:new mongoose.Types.ObjectId(id)}).populate("sell").populate("user")
+  return result
+} 
+
 const shopService = {
+  ADueUserAllSElls,
   getAParticularDaySells,
   createProduct,
   getAllSells,

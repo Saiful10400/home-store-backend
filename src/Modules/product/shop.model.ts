@@ -106,8 +106,8 @@ export const sellModel = model<tsell>("sell", sellSchema);
 
 // Due sells.............................
 const dueSellSchema = new Schema<tDueSell>(
-  {
-    user: { type: mongoose.Schema.ObjectId, ref: "user", required: true },
+  { 
+    user: { type: mongoose.Schema.ObjectId, ref: "dueCustomer", required: true },
     sell: { type: mongoose.Schema.ObjectId, ref: "sell", required: true },
   },
   { timestamps: true }

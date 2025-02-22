@@ -112,5 +112,19 @@ const getASpecificDateSells = catchAsync(async (req: Request, res: Response) => 
   });
 });
 
-const shopController = { getASpecificDateSells,getAllSells,createProduct, deleteProduct, findProduct,createDueCustomer,getdueCustomer,createASell,updateProduct };
+
+// get due user sells..
+ 
+const aDueUserAllSells = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.ADueUserAllSElls(req.params.id);
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "a due user all sells retrieved",
+  });
+});
+
+
+const shopController = {aDueUserAllSells, getASpecificDateSells,getAllSells,createProduct, deleteProduct, findProduct,createDueCustomer,getdueCustomer,createASell,updateProduct };
 export default shopController;
