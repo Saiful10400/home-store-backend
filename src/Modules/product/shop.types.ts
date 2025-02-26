@@ -43,3 +43,10 @@ export type tDueSell = {
  user: mongoose.Types.ObjectId
  sell: mongoose.Types.ObjectId
 };
+
+// due user due payment.
+
+export type tDuePayment={
+  user:mongoose.Types.ObjectId,
+  amount:number
+}

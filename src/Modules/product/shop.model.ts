@@ -1,5 +1,11 @@
 import mongoose, { model, Schema } from "mongoose";
-import { tDuecustomer, tDueSell, tProducts, tsell } from "./shop.types";
+import {
+  tDuecustomer,
+  tDuePayment,
+  tDueSell,
+  tProducts,
+  tsell,
+} from "./shop.types";
 
 // Due product...........
 const productSchema = new Schema<tProducts>({
@@ -106,11 +112,23 @@ export const sellModel = model<tsell>("sell", sellSchema);
 
 // Due sells.............................
 const dueSellSchema = new Schema<tDueSell>(
-  { 
-    user: { type: mongoose.Schema.ObjectId, ref: "dueCustomer", required: true },
+  {
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "dueCustomer",
+      required: true,
+    },
     sell: { type: mongoose.Schema.ObjectId, ref: "sell", required: true },
   },
   { timestamps: true }
 );
 
 export const dueSellModel = model<tDueSell>("dueSell", dueSellSchema);
+
+// Due payment ...................
+const duePaymentSchema = new Schema<tDuePayment>({
+  user: { type: mongoose.Schema.ObjectId, ref: "dueCustomer", required: true },
+  amount:Number
+});
+
+export const duePaymentModel=model<tDuePayment>("duePayment",duePaymentSchema)

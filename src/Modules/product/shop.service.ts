@@ -1,7 +1,13 @@
 // create product.
 
 import mongoose from "mongoose";
-import { dueCustomerModel, dueSellModel, productModel, sellModel } from "./shop.model";
+import {
+  dueCustomerModel,
+  duePaymentModel,
+  dueSellModel,
+  productModel,
+  sellModel,
+} from "./shop.model";
 import { tDuecustomer, tProduct, tProducts, tsell } from "./shop.types";
 import appError from "../../Errors/appError";
 
@@ -41,7 +47,10 @@ const getProduct = async (id?: string, searchTerm?: string) => {
 
 const createDueCustomer = async (payload: tDuecustomer) => {
   const result = await dueCustomerModel.create(payload);
-  return result;
+  console.log(result,"new creation")
+  // create dueuser payment object.
+  const createDuePayment=await duePaymentModel.create({user:result?._id,amount:0})
+  return {result,createDuePayment}; 
 };
 
 // get due customer.
@@ -130,13 +139,28 @@ const createASell = async (payload: {
         const sellCollectionData = await addToSellCollection();
         result = { sellCollectionData };
       } else if (payload.paymentType === "baki") {
-        
         const sellCollectionData = await addToSellCollection();
 
         // add to due customer profile.
-        const addToDucustomerProfile=await dueSellModel.create({sell:sellCollectionData._id,user:payload.dueCustomerId})
+        const addToDucustomerProfile = await dueSellModel.create({
+          sell: sellCollectionData._id,
+          user: payload.dueCustomerId,
+        });
+        console.log(addToDucustomerProfile,"profile update")
 
-        result = { sellCollectionData,addToDucustomerProfile };
+        // update due customer payment schema.
+        const updateDuepayment = await duePaymentModel.updateOne(
+          {user:new mongoose.Types.ObjectId(payload.dueCustomerId)},
+          {
+            $inc: {
+              amount: +payload.productField.reduce(
+                (prev, item) => prev + Number(item.totalPrice)
+              ,0),
+            },
+          }
+        ,{upsert:true});
+
+        result = { sellCollectionData, addToDucustomerProfile,updateDuepayment };
       }
       return result;
     });
@@ -211,13 +235,67 @@ const getAParticularDaySells = async (payload: string) => {
 };
 
 // get a due user all sells.
-const ADueUserAllSElls=async(id:string)=>{
+const ADueUserAllSElls = async (id: string) => {
+  const result = await dueSellModel
+    .find({ user: new mongoose.Types.ObjectId(id) })
+    .populate("sell")
+    .populate("user")
+ 
+ 
+ 
+    // const formatedData = result.map((item) => {
+    //   return {
+    //     products: item.sell.products.map((product) => ({
+    //       name: product.name,
+    //       quantity: Number(product.quantity),
+    //       singleBuyingPrice: Number(product.singleBuyingPrice),
+    //       singleSellingPrice: Number(product.singleSellingPrice),
+    //       totalPrice: Number(product.totalPrice),
+    //       totalProfit: Number(product.totalProfit),
+    //     })),
+    //     discount: item.Discount,
+    //     paymentType: item.paymentType,
+    //     profit: item.profit,
+    //     expenses: item.expenses,
+    //     created: item.createdAt,
+    //   };
+    // });
+
+ 
+
+
+  // user details.
+  const user = await dueCustomerModel.findById(id).lean();
+
+  // user payments.
+  const userPayments = await duePaymentModel.findOne({
+    user: new mongoose.Types.ObjectId(id),
+  });
+ 
+
+  return { user, sells: result, payments: userPayments };
+};
+
+// due pay (pay amount).
+const duePay = async (id: string, amount: string) => {
   
-  const result=await dueSellModel.find({user:new mongoose.Types.ObjectId(id)}).populate("sell").populate("user")
+  const result = await duePaymentModel.updateOne({user:new mongoose.Types.ObjectId(id)}, {
+    $inc: { amount: -Number(amount) },
+  });
+   
+  return result;
+};
+
+
+// get a due rsuer payment.
+const getADueUserPayment=async(id:string)=>{
+  const result=await duePaymentModel.findOne({user:new mongoose.Types.ObjectId(id)})
   return result
-} 
+}
 
 const shopService = {
+  duePay,
+  getADueUserPayment,
   ADueUserAllSElls,
   getAParticularDaySells,
   createProduct,
