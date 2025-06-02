@@ -50,3 +50,10 @@ export type tDuePayment={
   user:mongoose.Types.ObjectId,
   amount:number
 }
+
+
+export type duePayment2={
+  name:string,
+  amount:number,
+  payment:boolean
+}

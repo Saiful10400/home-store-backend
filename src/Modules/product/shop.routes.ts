@@ -41,5 +41,15 @@ router.put("/due-payment/:id",shopController.duePay)
 /// get a  user due payment.
 router.get("/due-payment/:id",shopController.getADueUserPayment)
 
+
+/// due payment 2.
+router.post("/due-payment2/create",shopController.createDuepayment2)
+
+//update.
+router.put("/due-payment2/update/:id",shopController.updateDuePayment2)
+
+// get.
+router.get("/due-payment2/get",shopController.getDuePayment2)
+
  
 export const productRouter=router

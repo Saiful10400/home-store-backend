@@ -1,11 +1,13 @@
 import mongoose, { model, Schema } from "mongoose";
 import {
+  duePayment2,
   tDuecustomer,
   tDuePayment,
   tDueSell,
   tProducts,
   tsell,
 } from "./shop.types";
+ 
 
 // Due product...........
 const productSchema = new Schema<tProducts>({
@@ -132,3 +134,14 @@ const duePaymentSchema = new Schema<tDuePayment>({
 });
 
 export const duePaymentModel=model<tDuePayment>("duePayment",duePaymentSchema)
+
+
+
+//due Pyment 2.0
+const duepayment2Schema=new Schema<duePayment2>({
+  amount:{type:Number,required:true},
+  name:{type:String,required:false,unique:true},
+  payment:{type:Boolean,required:true}
+},{timestamps:true})
+
+export const duePayment2model=model<duePayment2>("duePayment2",duepayment2Schema)

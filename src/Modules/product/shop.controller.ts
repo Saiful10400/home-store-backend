@@ -154,7 +154,47 @@ const getADueUserPayment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// due payment2.
+
+const createDuepayment2 = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.createDuePayment2(req.body);
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Due payment created.",
+  });
+});
+
+// update due payment2
+
+const updateDuePayment2 = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.updateDuePayment2(req.params.id,req.body)
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Due payment updated",
+  });
+});
+
+// get due payment
+
+const getDuePayment2 = catchAsync(async (req: Request, res: Response) => {
+  const data = await shopService.getDuepayments2()
+  sendResponse(res, {
+    data,
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "All duepayments2",
+  });
+});
+
 const shopController = {
+  createDuepayment2,
+  getDuePayment2,
+  updateDuePayment2,
+
   aDueUserAllSells,
   getADueUserPayment,
   duePay,
