@@ -46,7 +46,8 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 const findProduct = catchAsync(async (req: Request, res: Response) => {
   const data = await shopService.getProduct(
     req.query?.id as string | undefined,
-    req.query?.searchTerm as string | undefined
+    req.query?.searchTerm as string | undefined,
+    Number(req.query?.barCode)
   );
   sendResponse(res, {
     data,
@@ -169,7 +170,7 @@ const createDuepayment2 = catchAsync(async (req: Request, res: Response) => {
 // update due payment2
 
 const updateDuePayment2 = catchAsync(async (req: Request, res: Response) => {
-  const data = await shopService.updateDuePayment2(req.params.id,req.body)
+  const data = await shopService.updateDuePayment2(req.params.id, req.body);
   sendResponse(res, {
     data,
     success: true,
@@ -181,7 +182,7 @@ const updateDuePayment2 = catchAsync(async (req: Request, res: Response) => {
 // get due payment
 
 const getDuePayment2 = catchAsync(async (req: Request, res: Response) => {
-  const data = await shopService.getDuepayments2()
+  const data = await shopService.getDuepayments2();
   sendResponse(res, {
     data,
     success: true,

@@ -7,9 +7,8 @@ import {
   tProducts,
   tsell,
 } from "./shop.types";
- 
 
-// Due product...........
+//  product...........
 const productSchema = new Schema<tProducts>({
   englishName: {
     type: String,
@@ -30,6 +29,20 @@ const productSchema = new Schema<tProducts>({
   image: {
     type: String,
     required: true,
+  },
+  barCode: {
+    type: Number,
+    required: false,
+  },
+  expiredDate: {
+    type: Date,
+    required: false,
+    default: null,
+  },
+  stock: {
+    type: Number,
+    required: false,
+    default: null,
   },
 });
 
@@ -130,18 +143,25 @@ export const dueSellModel = model<tDueSell>("dueSell", dueSellSchema);
 // Due payment ...................
 const duePaymentSchema = new Schema<tDuePayment>({
   user: { type: mongoose.Schema.ObjectId, ref: "dueCustomer", required: true },
-  amount:Number
+  amount: Number,
 });
 
-export const duePaymentModel=model<tDuePayment>("duePayment",duePaymentSchema)
-
-
+export const duePaymentModel = model<tDuePayment>(
+  "duePayment",
+  duePaymentSchema
+);
 
 //due Pyment 2.0
-const duepayment2Schema=new Schema<duePayment2>({
-  amount:{type:Number,required:true},
-  name:{type:String,required:false,unique:true},
-  payment:{type:Boolean,required:true}
-},{timestamps:true})
+const duepayment2Schema = new Schema<duePayment2>(
+  {
+    amount: { type: Number, required: true },
+    name: { type: String, required: false, unique: true },
+    payment: { type: Boolean, required: true },
+  },
+  { timestamps: true }
+);
 
-export const duePayment2model=model<duePayment2>("duePayment2",duepayment2Schema)
+export const duePayment2model = model<duePayment2>(
+  "duePayment2",
+  duepayment2Schema
+);

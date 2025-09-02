@@ -34,15 +34,27 @@ const updateProduct = async (id: string, payload: Partial<tProduct>) => {
   return result;
 };
 
-const getProduct = async (id?: string, searchTerm?: string) => {
+const getProduct = async (
+  id?: string,
+  searchTerm?: string,
+  barCode?: number
+) => {
+  // productModel.updateMany({}, { $set: { stock: null } });
+
   let result;
+  if (barCode) {
+    result = await productModel.findOne({ barCode: barCode });
+    return result;
+  }
   if (id) {
     result = await productModel.findById(id);
+    return result;
   } else if (searchTerm) {
     const regx = new RegExp(searchTerm, "i");
     result = await productModel.find({
       $or: [{ englishName: regx }, { banglaName: regx }],
     });
+    return result;
   } else {
     result = await productModel.find();
   }
@@ -316,7 +328,7 @@ const createDuePayment2 = async (payload: duePayment2) => {
 
 // get
 const getDuepayments2 = async () => {
-  const result = await duePayment2model.find().sort({"_id":-1});
+  const result = await duePayment2model.find().sort({ _id: -1 });
   return result;
 };
 
