@@ -56,7 +56,7 @@ const getProduct = async (
     });
     return result;
   } else {
-    result = await productModel.find();
+    result = await productModel.find().sort({ _id: -1 });
   }
 
   return result;
